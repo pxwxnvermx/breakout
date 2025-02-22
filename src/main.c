@@ -1,6 +1,5 @@
 #include <raylib.h>
 #include <raymath.h>
-#include <stdio.h>
 
 #define WINDOW_W 800
 #define WINDOW_H 800
@@ -74,7 +73,7 @@ int main() {
         }
       }
       DrawCircleV(ball_pos, BALL_RADIUS, GREEN);
-      DrawRectangle(hitter.x, WINDOW_H - 20, HITTER_W, HITTER_H, BLUE);
+      DrawRectangleRec(hitter, BLUE);
     }
     EndDrawing();
   }
