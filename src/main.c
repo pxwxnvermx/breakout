@@ -1,6 +1,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include "particles.h"
+
 #define WINDOW_W 800
 #define WINDOW_H 800
 
@@ -31,6 +33,8 @@ int main() {
   };
   int blocks[ROWS][COLS] = {0};
 
+  ParticleState particle_state = {0};
+
   while (!WindowShouldClose()) {
     float delta = GetFrameTime();
     if (IsKeyDown(KEY_A))
@@ -38,6 +42,7 @@ int main() {
     else if (IsKeyDown(KEY_D))
       hitter.x += 5;
     hitter.x = (int)Clamp(hitter.x, 20, WINDOW_W - HITTER_W - 20);
+    update_particles(&particle_state, delta);
 
     if (20 >= ball_pos.x - 4 || ball_pos.x - 4 >= WINDOW_W - 20) {
       ball_vel.x *= -1;
@@ -51,6 +56,7 @@ int main() {
     BeginDrawing();
     {
       ClearBackground(RAYWHITE);
+      draw_particles(&particle_state);
       DrawRectangle(0, 0, 20, WINDOW_H, BLACK);
       DrawRectangle(0, 0, WINDOW_W, 20, BLACK);
       DrawRectangle(WINDOW_W - 20, 0, 20, WINDOW_H, BLACK);
@@ -68,12 +74,20 @@ int main() {
           if (CheckCollisionCircleRec(ball_pos, BALL_RADIUS, block)) {
             blocks[row][col] = 1;
             ball_vel.y *= -1;
+            emit_particle(&particle_state,
+                          (Particle){.pos = {block.x + BREAKBLOCK_W / 2,
+                                             block.y + BREAKBLOCK_H / 2},
+                                     .vel = {0},
+                                     .size_begin = 5,
+                                     .size_end = 0,
+                                     .lifetime = 3.0f,
+                                     .life_remaining = 3.0f});
           }
-          DrawRectangleRec(block, RED);
+          DrawRectangleGradientEx(block, RED, ORANGE, ORANGE, RED);
         }
       }
-      DrawCircleV(ball_pos, BALL_RADIUS, GREEN);
-      DrawRectangleRec(hitter, BLUE);
+      DrawCircleGradient(ball_pos.x, ball_pos.y, BALL_RADIUS, PURPLE, BLUE);
+      DrawRectangleGradientEx(hitter, BLUE, GREEN, BLUE, GREEN);
     }
     EndDrawing();
   }
