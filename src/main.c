@@ -46,10 +46,14 @@ int main() {
     hitter.x = Lerp(hitter.x, hitter_target_x, delta);
     update_particles(&particle_state, delta);
 
-    if (20 >= ball_pos.x - 4 || ball_pos.x - 4 >= WINDOW_W - 20) {
+    if (CheckCollisionCircleRec(ball_pos, BALL_RADIUS,
+                                (Rectangle){0, 0, 20, WINDOW_H}) ||
+        CheckCollisionCircleRec(ball_pos, BALL_RADIUS,
+                                (Rectangle){WINDOW_W - 20, 0, 20, WINDOW_H})) {
       ball_vel.x *= -1;
     }
-    if (20 >= ball_pos.y - 4 ||
+    if (CheckCollisionCircleRec(ball_pos, BALL_RADIUS,
+                                (Rectangle){0, 0, WINDOW_W, 20}) ||
         CheckCollisionCircleRec(ball_pos, BALL_RADIUS, hitter)) {
       ball_vel.y *= -1;
     }
