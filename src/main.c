@@ -31,6 +31,7 @@ int main() {
       .width = HITTER_W,
       .height = HITTER_H,
   };
+  float hitter_target_x = hitter.x;
   int blocks[ROWS][COLS] = {0};
 
   ParticleState particle_state = {0};
@@ -38,10 +39,11 @@ int main() {
   while (!WindowShouldClose()) {
     float delta = GetFrameTime();
     if (IsKeyDown(KEY_A))
-      hitter.x -= 5;
+      hitter_target_x -= 5;
     else if (IsKeyDown(KEY_D))
-      hitter.x += 5;
-    hitter.x = (int)Clamp(hitter.x, 20, WINDOW_W - HITTER_W - 20);
+      hitter_target_x += 5;
+    hitter_target_x = (int)Clamp(hitter_target_x, 20, WINDOW_W - HITTER_W - 20);
+    hitter.x = Lerp(hitter.x, hitter_target_x, delta);
     update_particles(&particle_state, delta);
 
     if (20 >= ball_pos.x - 4 || ball_pos.x - 4 >= WINDOW_W - 20) {
