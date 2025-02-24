@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS= -std=c17 -Wall -Wextra -ggdb
+CFLAGS= -std=c17 -Wall -Wextra -ggdb -Werror
 LIBS= -lraylib -lm -ldl -lpthread -lglfw -lc
 
 bin/main: src/main.c
